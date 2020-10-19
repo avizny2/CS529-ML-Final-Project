@@ -1,0 +1,3 @@
+ - Setup ML environment for local ML tests. (4 hr)
+ - Use ResNet30 and ResNet35 pre-trained models to extract its hidden layers. (4 hr)
+ - Collect data, and create file for team usage and visualization. (8 hr)
