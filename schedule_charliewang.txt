@@ -1,0 +1,3 @@
+-set up the environment Pytorch
+-research about resent pertained model
+-test it with cifar standard dataset
