@@ -1,0 +1,3 @@
+- setup & review the work environment- Pytorch
+- research ResNet30 and ResNet35 pretrained models & work on extracting features
+- Plan visualization approach for plotting / representing how the test data points move within the feature dimensions
