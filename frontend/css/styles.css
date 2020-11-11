@@ -38,6 +38,10 @@ body {
     margin-left: 80px ;
 }
 
+.hidden-selector {
+    display: none;
+}
+
 .menu-settings-text {
     padding-top: 10px;
     display: inline-block;

@@ -24,7 +24,10 @@ dRedSelector.listen('MDCSelect:change', () => {
 });
 
 classesSelector.listen('MDCSelect:change', () => {
-    alert(`Selected option at index ${dRedSelector.selectedIndex} with value "${dRedSelector.value}"`);
+    //alert(`Selected option at index ${classesSelector.selectedIndex} with value "${classesSelector.value}"`);
+    if (classesSelector.selectedIndex > 1) {
+        classesSelector.selectedIndex = 0;
+    }
 });
   
 const visualizeButton = document.querySelector('#menu-button');
