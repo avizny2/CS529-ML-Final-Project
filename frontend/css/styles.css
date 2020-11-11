@@ -1,3 +1,46 @@
 body {
-    margin: 0px;
+    display: flex;
+    height: 100vh;
+}
+  
+.mdc-drawer-app-content {
+    flex: auto;
+    overflow: auto;
+    position: relative;
+}
+
+.mdc-drawer {
+    width : 300px;
+}
+
+.main-content {
+    overflow: auto;
+    height: 100%;
+}
+  
+.app-bar {
+    position: absolute;
+}
+
+.mdc-top-app-bar {
+    z-index: 10;
+}
+
+.menu-selector-width {
+    width: 299px;
+}
+
+.menu-select {
+    padding-bottom: 25px;
+}
+
+#menu-button {
+    margin-left: 80px ;
+}
+
+.menu-settings-text {
+    padding-top: 10px;
+    display: inline-block;
+    padding-left: 80px;
+
 }
