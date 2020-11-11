@@ -11,7 +11,7 @@
         "Cake",
         "Logitech"
     ],
-    "n_layers": 25,
+    "n_layers": 5,
     "data_0": {
         "Class 1": [
             {
@@ -38,6 +38,81 @@
         "Logitech": []
     },
     "data_1": {
+        "Class 1": [
+            {
+                "uid": "1T33",
+                "filename": "1T33.png",
+                "comp1": -0.0025,
+                "comp2": 4.5893
+            },
+            {
+                "uid": "441ER",
+                "filename": "441ER.png",
+                "comp1": -4.0025,
+                "comp2": 1.5893
+            }
+        ],
+        "Class 2": [],
+        "Class 3": [],
+        "Class 4": [],
+        "Dog": [],
+        "Aeroplane": [],
+        "Truck": [],
+        "Person": [],
+        "Cake": [],
+        "Logitech": []
+    },
+    "data_2": {
+        "Class 1": [
+            {
+                "uid": "1T33",
+                "filename": "1T33.png",
+                "comp1": -0.0025,
+                "comp2": 4.5893
+            },
+            {
+                "uid": "441ER",
+                "filename": "441ER.png",
+                "comp1": -4.0025,
+                "comp2": 1.5893
+            }
+        ],
+        "Class 2": [],
+        "Class 3": [],
+        "Class 4": [],
+        "Dog": [],
+        "Aeroplane": [],
+        "Truck": [],
+        "Person": [],
+        "Cake": [],
+        "Logitech": []
+    },
+    "data_3": {
+        "Class 1": [
+            {
+                "uid": "1T33",
+                "filename": "1T33.png",
+                "comp1": -0.0025,
+                "comp2": 4.5893
+            },
+            {
+                "uid": "441ER",
+                "filename": "441ER.png",
+                "comp1": -4.0025,
+                "comp2": 1.5893
+            }
+        ],
+        "Class 2": [],
+        "Class 3": [],
+        "Class 4": [],
+        "Dog": [],
+        "Aeroplane": [],
+        "Truck": [],
+        "Person": [],
+        "Cake": [],
+        "Logitech": []
+    },
+    "data_4": {
         "Class 1": [
             {
                 "uid": "1T33",
