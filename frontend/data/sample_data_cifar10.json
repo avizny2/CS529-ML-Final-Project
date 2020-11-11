@@ -1,0 +1,65 @@
+{
+    "classes": [
+        "Class 1",
+        "Class 2",
+        "Class 3",
+        "Class 4",
+        "Dog",
+        "Aeroplane",
+        "Truck",
+        "Person",
+        "Cake",
+        "Logitech"
+    ],
+    "n_layers": 25,
+    "data_0": {
+        "Class 1": [
+            {
+                "uid": "1563A",
+                "filename": "1563A.png",
+                "comp1": -1.3134,
+                "comp2": 0.9642
+            },
+            {
+                "uid": "44563T",
+                "filename": "44563T.png",
+                "comp1": -0.3134,
+                "comp2": 1.9642
+            }
+        ],
+        "Class 2": [],
+        "Class 3": [],
+        "Class 4": [],
+        "Dog": [],
+        "Aeroplane": [],
+        "Truck": [],
+        "Person": [],
+        "Cake": [],
+        "Logitech": []
+    },
+    "data_1": {
+        "Class 1": [
+            {
+                "uid": "1T33",
+                "filename": "1T33.png",
+                "comp1": -0.0025,
+                "comp2": 4.5893
+            },
+            {
+                "uid": "441ER",
+                "filename": "441ER.png",
+                "comp1": -4.0025,
+                "comp2": 1.5893
+            }
+        ],
+        "Class 2": [],
+        "Class 3": [],
+        "Class 4": [],
+        "Dog": [],
+        "Aeroplane": [],
+        "Truck": [],
+        "Person": [],
+        "Cake": [],
+        "Logitech": []
+    }
+}
