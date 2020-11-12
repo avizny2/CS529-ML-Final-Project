@@ -47,7 +47,8 @@ var App = App || {};
     visualizeButton = document.querySelector('#menu-visualize-button');
     visualizeButton.addEventListener('click', (event) => {
       drawer.open = false;
-      $('#visualization-section').html('');
+      $('#visualization-section').text('');
+      App.start();
     });
   };
 
