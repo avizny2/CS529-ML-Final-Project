@@ -10,26 +10,32 @@ const modelSelector = new mdc.select.MDCSelect(document.querySelector('#model-se
 const datasetSelector = new mdc.select.MDCSelect(document.querySelector('#dataset-selector'));
 const dRedSelector = new mdc.select.MDCSelect(document.querySelector('#d-red-selector'));
 const classesSelector = new mdc.select.MDCSelect(document.querySelector('#classes-selector'));
+const classesCheckboxes = [];
+for (let i = 1; i <=10; i++) {
+  let checkbox = new mdc.checkbox.MDCCheckbox(document.querySelector('#menu-selector-checkbox-' + i));
+  classesCheckboxes.push(checkbox);
+}
 
-modelSelector.listen('MDCSelect:change', () => {
-  alert(`Selected option at index ${modelSelector.selectedIndex} with value "${modelSelector.value}"`);
-});
-
-datasetSelector.listen('MDCSelect:change', () => {
-    alert(`Selected option at index ${datasetSelector.selectedIndex} with value "${datasetSelector.value}"`);
-});
-
-dRedSelector.listen('MDCSelect:change', () => {
-    alert(`Selected option at index ${dRedSelector.selectedIndex} with value "${dRedSelector.value}"`);
-});
-
+let customClassesList = [];
 classesSelector.listen('MDCSelect:change', () => {
-    //alert(`Selected option at index ${classesSelector.selectedIndex} with value "${classesSelector.value}"`);
+    if (classesSelector.selectedIndex === 0) {
+      return;
+    }
+    customClassesList = [];
+    console.log("val: " + classesSelector.selectedIndex);
     if (classesSelector.selectedIndex > 1) {
         classesSelector.selectedIndex = 0;
+        for (let i = 0; i < 10; i++) {
+          let checkbox = classesCheckboxes[i];
+          if (checkbox.checked) {
+            customClassesList.push(i);
+          }
+        }
     }
 });
-  
+
+
+
 const visualizeButton = document.querySelector('#menu-button');
 visualizeButton.addEventListener('click', (event) => {
   drawer.open = false;
