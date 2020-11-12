@@ -48,7 +48,7 @@ visualizeButton.addEventListener('click', (event) => {
 //   .attr("transform",
 //   "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("../../backend/model/sample_json5.json").then(function(data) {
+d3.json("data/sample_json5.json").then(function(data) {
     
   var n_layers = data.n_layers;
   console.log(data.n_layers)
