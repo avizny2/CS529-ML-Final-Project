@@ -54,7 +54,9 @@ var App = App || {};
 
   /* Entry point of the application */
   App.start = function() {
-    d3.json("/data/sample_json2.json").then(function(data) {
+    d3.json("https://balvar30.people.uic.edu/finalproj/data/sample_json5.json").then(function(data) {
+
+      console.log('n_layers',data.n_layers)
     
       var n_layers = data.n_layers;
       var n_classes = 10; //data.classes.length;
@@ -116,12 +118,12 @@ var App = App || {};
       function PlotGrid(id, width, height, square) {
         //Xaxis
         var x = d3.scaleLinear()
-              .domain([5e-5, 5.0e-9])
+              .domain([-5, 5])
               .range([ 0, 52]);
 
         //Yaxis
         var y = d3.scaleLinear()
-        .domain([-2, 2])
+        .domain([-4, 4])
         .range([ 52, 0]);
 
         var grid = d3.select(id).append("svg")
