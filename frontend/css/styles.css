@@ -52,8 +52,8 @@ body {
 // .grid {
 //     display: grid;
 //     grid-gap: 1px;
-//     grid-template-rows: repeat(auto-fill, minmax(9vh,1fr));
-//     grid-auto-columns: 9vh;
+//     grid-template-rows: repeat(auto-fill, minmax(10vh,1fr));
+//     grid-auto-columns: 30vh;
 //  }
 
 //  .plot {

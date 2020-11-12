@@ -48,7 +48,7 @@ visualizeButton.addEventListener('click', (event) => {
 //   .attr("transform",
 //   "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("/data/sample_data_cifar10.json").then(function(data) {
+d3.json("../../backend/model/sample_json5.json").then(function(data) {
     
   var n_layers = data.n_layers;
   console.log(data.n_layers)
@@ -75,7 +75,7 @@ d3.json("/data/sample_data_cifar10.json").then(function(data) {
         }
       }
   }
-  console.log(plotdata)
+  // console.log(plotdata)
 
 //Start plot grid
 //plot grid margin 
@@ -84,10 +84,10 @@ width = $(window).height() / 10 - margin.left - margin.right,
 height = $(window).height() / 10 - margin.top - margin.bottom;
 
 
-console.log($(document).height()/10)
-console.log($(document).width()/10)
-console.log($(window).height()/10)
-console.log($(window).width()/10)
+// console.log($(document).height()/10)
+// console.log($(document).width()/10)
+// console.log($(window).height()/10)
+// console.log($(window).width()/10)
 
 // Expandable Grid
 var grid = d3.select("#main-content")
@@ -108,10 +108,8 @@ var grid = d3.select("#main-content")
   "translate(" + margin.left + "," + margin.top + ")");
 
   //////TODO: Trying to iterate plot using the 2d array plotdata[layer_i][class_i] 
-  for (let i = 0; i < n_layers; i++) {
-    if(!!data['dataset_'+i]){
-      let layer_data = data['dataset_'+i];
-      layer_data.forEach(class_data => {
+  for (let i = 0; i < n_classes; i++) {
+      for (let j = 0; j < n_layers; j++) {
       //Plot
       svg.append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -120,15 +118,17 @@ var grid = d3.select("#main-content")
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
       //X axis
+    //  console.log(plotdata.comp2)
+
       var x = d3.scaleLinear()
-        .domain([-2, 2])
+        .domain([-1, 1])
         .range([ 0, width ]);
       svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
       //Yaxis
       var y = d3.scaleLinear()
-        .domain([-2, 2])
+        .domain([-1, 1])
         .range([ height, 0]);
       svg.append("g")
         .call(d3.axisLeft(y));
@@ -144,8 +144,8 @@ var grid = d3.select("#main-content")
         .attr("r", 1.5)
         .style("fill", "#69b3a2")
 
-      });
-    }
+      }
+    
   }
 
 
