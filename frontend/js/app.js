@@ -54,7 +54,7 @@ var App = App || {};
 
   /* Entry point of the application */
   App.start = function () {
-    d3.json("/data/sample_json5.json").then(function (data) {
+    d3.json("https://balvar30.people.uic.edu/finalproj/data/sample_json5.json").then(function (data) {
 
       console.log('n_layers', data.n_layers)
 
@@ -118,18 +118,20 @@ var App = App || {};
       function PlotGrid(id, width, height, square) {
         //Xaxis
         var x = d3.scaleLinear()
-          .domain([-5, 5])
+          .domain([-0.1, 0.1])
           .range([0, 52]);
 
         //Yaxis
         var y = d3.scaleLinear()
-          .domain([-4, 4])
+          .domain([-0.1, 0.1])
           .range([52, 0]);
 
         var grid = d3.select(id).append("svg")
           .attr("width", "90vw")
           .attr("height", $(window).height() - 150)
-          .attr("class", "chart");
+          .attr("class", "chart")
+          .style("margin-top", "50px")
+          .style("margin-left", "75px");
 
         var row = grid.selectAll(".row")
           .data(gridData)
@@ -187,7 +189,7 @@ var App = App || {};
   };
 
   App.init();
-  App.start();
+  //App.start();
 
 })();
 
