@@ -273,6 +273,7 @@ const View = function (controllerClass) {
     }
 
     self.buildVisualization = function (visualizationData) {
+        classVisualizationState = [];
         let mainVisContainer = $('.vis-main-container');
         mainVisContainer.empty();
 
