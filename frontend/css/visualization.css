@@ -3,9 +3,7 @@
     width: 800px;
     height: 500px;
     position: absolute;
-    border-width: 1px;
-    border-color: #000000;
-    border-style: solid;
+   
     margin-top: 20px;
 }
 
@@ -65,6 +63,11 @@
     margin-left: 20px;
     border-width: 1px;
     border-color: #000000;
+    border-style: solid;
+}
+
+.vis-selected-block {
+    border-width: 4px;
     border-style: solid;
 }
 
