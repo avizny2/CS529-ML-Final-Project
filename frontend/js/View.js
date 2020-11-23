@@ -15,7 +15,8 @@ const View = function (controllerClass) {
                 'minMaxY': []
             },
             'isExpended': false,
-            'selectedBlockID': -1   
+            'selectedBlockID': -1,
+            'selectedGUID': ''
         }
     };
 
@@ -124,12 +125,43 @@ const View = function (controllerClass) {
         return [min, max];
     }
 
+    self.filterPoints = function (classID, guid) {
+        if (guid.length === 0) {
+            return;
+        }
+        let prevGUID = classVisualizationState[classID].selectedGUID;
+        classVisualizationState[classID].selectedGUID = guid;
+        $('.vis-class-container.class-id-' + classID).find('.vis-class-layer').each((k1, v1) => {
+            let selectedPoint;
+            $(v1).find('g > circle').each((k2, v2) => {
+                let point = $(v2);
+                
+                if (prevGUID === guid) {
+                    point.attr('style','fill: ' + currentData[classID].meta.color);
+                } else {
+                    if (point.attr('id') !== guid) {
+                        point.attr('style','fill: #A8A8A8');
+                    } else {
+                        selectedPoint = point.attr('style','fill: ' + currentData[classID].meta.color);   
+                    }
+                }
+            });
+
+            if (selectedPoint !== undefined) {
+                selectedPoint.detach().appendTo($(v1).find('g'));
+            }
+            if (prevGUID === guid) {
+                classVisualizationState[classID].selectedGUID = 'none'
+            }
+        });
+    };
+
     self.plotLayer = function (element, classID, blockID, layerID) {
         let layerData = currentData[classID].blocks[blockID].layers[layerID];
         let selectedElementJQ = $(element);
         let selectedElementD3 = d3.select(element);
         let visualizationState = classVisualizationState[classID];
-        let pointradius = 2;
+        let pointradius = 4;
 
         let xScaler = d3.scaleLinear()
             .domain(visualizationState.classData.minMaxX)
@@ -143,17 +175,24 @@ const View = function (controllerClass) {
             .append("svg")
               .attr("width", selectedElementJQ.width())
               .attr("height", selectedElementJQ.height())
-            .append("g")
 
         svg.append('g')
             .selectAll("dot")
             .data(layerData)
             .enter()
             .append("circle")
-              .attr("cx", function (d) { return xScaler(d.x); } )
-              .attr("cy", function (d) { return yScaler(d.y); } )
+              .attr('id', (d) => d.guid)
+              .attr("cx", (d) => xScaler(d.x))
+              .attr("cy", (d) => yScaler(d.y))
               .attr("r", pointradius)
-              .style("fill", currentData[classID].meta.color);
+              .style("fill", currentData[classID].meta.color)
+              .on('click', (event, data) => {
+                let guid = data.guid;
+                let x = $(event.target).parents('.vis-class-layer');
+                let parsedData = $(event.target).parents('.vis-class-layer').data('layer-id').split('-')
+                console.log(parsedData);
+                self.filterPoints(parsedData[0], guid);
+              });
     }
 
     self.expendClassToggle = function (classID) {
@@ -225,6 +264,9 @@ const View = function (controllerClass) {
             layersContainer.append(blockLayer);
             self.plotLayer(blockLayer[0], classID, blockID, i);
         }
+        let currGUID = classVisualizationState[classID].selectedGUID;
+        classVisualizationState[classID].selectedGUID = '';
+        self.filterPoints(classID, currGUID);
 
         classVisualizationState[classID].selectedBlockID = blockID;
 
