@@ -7,7 +7,7 @@ const View = function (controllerClass) {
 
     let currentData;
     let classVisualizationState = [];
-    let VisualizationState = function() {
+    let VisualizationState = function () {
         return {
             'classID': -1,
             'classData': {
@@ -21,12 +21,11 @@ const View = function (controllerClass) {
     };
 
     let drawer, topAppBar;
-    let modelSelector, datasetSelector, dRedSelector, classesSelector, visualizeButton;
+    let modelSelector, datasetSelector, dRedSelector, classesSelector, visualizeButton, filterButton;
     let classesCheckboxes = [];
     let customClassesList = [];
-
-
-    let cleanClassesSelector = $('#classes-selector .mdc-list').clone();
+    let classNameList = [];
+    let isDataLoaded = false;
 
     self.initialize = function () {
         drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
@@ -45,28 +44,35 @@ const View = function (controllerClass) {
         visualizeButton.addEventListener('click', (event) => {
             drawer.open = false;
             controller.visualizaButtonClicked(customClassesList);
-            $(visualizeButton).find('.mdc-button__label').text('REFRESH');
+            $('.vis-classes-filter-container').show();
+            $('.vis-image-container').show();
+        });
+
+        filterButton = document.querySelector('#vis-classe-filter-button');
+        filterButton.addEventListener('click', (event) => {
+            if (customClassesList.length === 0) {
+                $('.vis-class-container').show();
+                return;
+            }
+            $('.vis-class-container').each((k, v) => {
+                let tClass = $(v);
+                for (let i = 0; i < customClassesList.length; i++) {
+                    if (tClass.hasClass('class-id-' + customClassesList[i])) {
+                        tClass.show();
+                        break;
+                    } else {
+                        tClass.hide();
+                    }
+                }
+            });
         });
     }
 
-    self.updateClassFilters = function (classNameList) {
-        let checkboxTemplate = $('.select-checkbox.template');
-        let classFilterSelector = cleanClassesSelector.clone();
-
-        for (let i = 0; i < classNameList.length; i++) {
-            let checkboxClone = checkboxTemplate.clone();
-            checkboxClone.removeClass('template');
-            checkboxClone.find('.mdc-list-item__text').html(classNameList[i]);
-            classFilterSelector.append(checkboxClone);
-            classesCheckboxes.push(new mdc.checkbox.MDCCheckbox(checkboxClone.find('.mdc-checkbox')[0]));
-        }
-
-        let checkboxSelectorList = $('#classes-selector .mdc-list');
-        checkboxSelectorList.empty();
-        checkboxSelectorList.append(classFilterSelector.children());
-
+    self.updateClassFilters = function (loadedClassNameList) {
+        $('.vis-classes-filter-container').hide();
+        $('.vis-image-container').hide();
+        classNameList = loadedClassNameList;
         classesSelector = new mdc.select.MDCSelect(document.querySelector('#classes-selector'));
-
         classesSelector.listen('MDCSelect:change', () => {
             self.classFilterEventListener(this)
         });
@@ -93,16 +99,16 @@ const View = function (controllerClass) {
     self.calculateClassMinMax = function (blockData, axis) {
         let min = 9999999999;
         let max = -999999999;
-        
+
         for (let i = 0; i < blockData.length; i++) {
             let currentBlock = blockData[i].layers;
-           
+
             for (let j = 0; j < currentBlock.length; j++) {
                 let currentLayer = currentBlock[j];
-                
+
                 for (let k = 0; k < currentLayer.length; k++) {
                     let currentPoint = currentLayer[k];
-                    
+
                     if (axis === 'x') {
                         if (min > currentPoint.x) {
                             min = currentPoint.x;
@@ -118,7 +124,7 @@ const View = function (controllerClass) {
                             max = min = currentPoint.y;
                         }
                     }
-                    
+
                 }
             }
         }
@@ -126,7 +132,7 @@ const View = function (controllerClass) {
     }
 
     self.filterPoints = function (classID, guid) {
-        if (guid.length === 0) {
+        if (guid.length === 0 || guid === 'none') {
             return;
         }
         let prevGUID = classVisualizationState[classID].selectedGUID;
@@ -135,14 +141,14 @@ const View = function (controllerClass) {
             let selectedPoint;
             $(v1).find('g > circle').each((k2, v2) => {
                 let point = $(v2);
-                
+
                 if (prevGUID === guid) {
-                    point.attr('style','fill: ' + currentData[classID].meta.color);
+                    point.attr('style', 'fill: ' + currentData[classID].meta.color);
                 } else {
                     if (point.attr('id') !== guid) {
-                        point.attr('style','fill: #A8A8A8');
+                        point.attr('style', 'fill: #A8A8A8');
                     } else {
-                        selectedPoint = point.attr('style','fill: ' + currentData[classID].meta.color);   
+                        selectedPoint = point.attr('style', 'fill: ' + currentData[classID].meta.color);
                     }
                 }
             });
@@ -156,43 +162,48 @@ const View = function (controllerClass) {
         });
     };
 
-    self.plotLayer = function (element, classID, blockID, layerID) {
+    self.plotLayer = function (element, classID, blockID, layerID, addEventListener = false) {
         let layerData = currentData[classID].blocks[blockID].layers[layerID];
         let selectedElementJQ = $(element);
         let selectedElementD3 = d3.select(element);
         let visualizationState = classVisualizationState[classID];
         let pointradius = 4;
-
         let xScaler = d3.scaleLinear()
             .domain(visualizationState.classData.minMaxX)
             .range([0, selectedElementJQ.width() - pointradius * 2]);
 
         var yScaler = d3.scaleLinear()
             .domain(visualizationState.classData.minMaxY)
-            .range([selectedElementJQ.height() - pointradius * 2 , 0]);
+            .range([selectedElementJQ.height() - pointradius * 2, 0]);
 
         let svg = selectedElementD3
             .append("svg")
-              .attr("width", selectedElementJQ.width())
-              .attr("height", selectedElementJQ.height())
+            .attr("width", selectedElementJQ.width())
+            .attr("height", selectedElementJQ.height())
 
         svg.append('g')
             .selectAll("dot")
             .data(layerData)
             .enter()
             .append("circle")
-              .attr('id', (d) => d.guid)
-              .attr("cx", (d) => xScaler(d.x))
-              .attr("cy", (d) => yScaler(d.y))
-              .attr("r", pointradius)
-              .style("fill", currentData[classID].meta.color)
-              .on('click', (event, data) => {
-                let guid = data.guid;
+            .attr('id', (d) => d.guid)
+            .attr("cx", (d) => xScaler(d.x))
+            .attr("cy", (d) => yScaler(d.y))
+            .attr("r", pointradius)
+            .style("fill", currentData[classID].meta.color)
+            .on('click', (event, data) => {
+                if (addEventListener) {
+                    let guid = data.guid;
                 let x = $(event.target).parents('.vis-class-layer');
                 let parsedData = $(event.target).parents('.vis-class-layer').data('layer-id').split('-')
-                console.log(parsedData);
                 self.filterPoints(parsedData[0], guid);
-              });
+                }
+            });
+        // svg.append("text")
+        //     .attr('x', selectedElementJQ.width() / 2)
+        //     .attr('y', 15)
+        //     .style('text-anchor', 'middle')
+        //     .text('B' + (parseInt(blockID) + 1) + '-L' + (parseInt(layerID) + 1));
     }
 
     self.expendClassToggle = function (classID) {
@@ -205,14 +216,14 @@ const View = function (controllerClass) {
             classVisualizationState[classID].isExpended = false;
             classVisualizationState[classID].selectedBlockID = -1;
             clikedClass.animate({
-                height: '102px',
+                height: '152px',
             });
             clikedClass.data('class-expanded', 'false');
             $(self.findClassById(classID)).find('.vis-class-block').removeClass('vis-selected-block');
         } else {
             classVisualizationState[classID].isExpended = true;
             clikedClass.animate({
-                height: '220px',
+                height: '330px',
             });
             clikedClass.data('class-expanded', 'true')
         }
@@ -224,12 +235,17 @@ const View = function (controllerClass) {
         let classID = blockDataAttr[0];
         let blockID = blockDataAttr[1];
         let layerID = blockDataAttr[2];
-        
-
     }
 
     self.processBlockClickEvent = function (event) {
         let blockElement = $(event.target);
+       
+        if (blockElement.is('svg')) {
+            blockElement = blockElement.parent();
+        } else if (blockElement.is('circle')) {
+            blockElement = blockElement.parents('.vis-class-block');
+        }
+
         let blockDataAttr = blockElement.data('block-id').split("-");
         let classID = blockDataAttr[0];
         let blockID = blockDataAttr[1];
@@ -244,7 +260,6 @@ const View = function (controllerClass) {
             $(self.findBlockByID(classID, prevClickedBlockID)).removeClass('vis-selected-block');
             blockElement.addClass('vis-selected-block');
         }
-        
 
         if (layersContainer.length) {
             layersContainer.empty();
@@ -257,12 +272,12 @@ const View = function (controllerClass) {
         layersContainer.append('<div class="vis-class-info-spacer"></div>');
 
         let blockLayersList = currentData[classID].blocks[blockID].layers;
-        
+
         for (let i = 0; i < blockLayersList.length; i++) {
             let blockLayer = self.createLayerElement();
             blockLayer.attr('data-layer-id', classID + '-' + blockID + '-' + i);
             layersContainer.append(blockLayer);
-            self.plotLayer(blockLayer[0], classID, blockID, i);
+            self.plotLayer(blockLayer[0], classID, blockID, i, true);
         }
         let currGUID = classVisualizationState[classID].selectedGUID;
         classVisualizationState[classID].selectedGUID = '';
@@ -297,6 +312,8 @@ const View = function (controllerClass) {
     self.createClassInfoElement = function () {
         let classContainer = $(document.createElement('div'));
         classContainer.addClass('vis-class-info');
+        
+
         return classContainer;
     }
 
@@ -316,7 +333,7 @@ const View = function (controllerClass) {
 
     self.buildVisualization = function (visualizationData) {
         classVisualizationState = [];
-        let mainVisContainer = $('.vis-main-container');
+        let mainVisContainer = $('.vis-main-container .vis-left-pane');
         mainVisContainer.empty();
 
         for (let i = 0; i < visualizationData.length; i++) {
@@ -333,18 +350,17 @@ const View = function (controllerClass) {
 
             classInfoElement.text(classData.meta.name);
             classBlockContainer.append(classInfoElement);
+            classContainer.append(classBlockContainer);
+            mainVisContainer.append(classContainer);
 
             for (let j = 0; j < classData.blocks.length; j++) {
                 let blockElement = self.createBlockElement();
                 blockElement.addClass('block-id-' + i + '-' + j)
                 blockElement.attr('data-block-id', i + '-' + j);
-                blockElement.text(classData.blocks[j].meta.name);
                 blockElement.on('click', (event) => self.processBlockClickEvent(event));
                 classBlockContainer.append(blockElement);
+                self.plotLayer(blockElement[0], i, j, (currentData[i].blocks[j].layers.length - 1));
             }
-
-            classContainer.append(classBlockContainer);
-            mainVisContainer.append(classContainer);
 
             if (i !== (visualizationData.length - 1)) {
                 mainVisContainer.append('<div class="vis-class-spacer"></div>')
@@ -354,18 +370,32 @@ const View = function (controllerClass) {
     };
 
     self.classFilterEventListener = function (element) {
-        if (classesSelector.selectedIndex === 0) {
-            return;
-        }
-        customClassesList = [];
-        if (classesSelector.selectedIndex > 1) {
-            classesSelector.selectedIndex = 0;
-            for (let i = 0; i < classesCheckboxes.length; i++) {
-                let checkbox = classesCheckboxes[i];
-                if (checkbox.checked) {
-                    customClassesList.push(i);
-                }
+        let classFilterSelector = $('.vis-classes-filter-custom');
+        if (classesSelector.selectedIndex === 1) {
+            classFilterSelector.empty();
+            let checkboxTemplate = $('.mdc-checkbox.template');
+
+            for (let i = 0; i < classNameList.length; i++) {
+                let checkboxClone = checkboxTemplate.clone();
+                checkboxClone.removeClass('template');
+                checkboxClone.find('input').attr('id', 'class-' + i);
+                checkboxClone.find('.checkbox__text').html(classNameList[i]);
+                checkboxClone.on('click', (event) => {
+                    let classSelected = parseInt($(event.target).attr('id').split('-')[1]);
+                    var index = customClassesList.indexOf(classSelected);
+                    if (index > -1) {
+                        customClassesList.splice(index, 1);
+                    } else {
+                        customClassesList.push(classSelected);
+                    }
+                    customClassesList.sort();
+                });
+                classFilterSelector.append(checkboxClone);
+                classesCheckboxes.push(new mdc.checkbox.MDCCheckbox(checkboxClone[0]));
             }
+        } else {
+            classFilterSelector.empty();
+            customClassesList = [];
         }
     }
 
@@ -377,13 +407,13 @@ const View = function (controllerClass) {
 
         updateClassFilters: function (classNameList) {
             self.updateClassFilters(classNameList);
+
         },
 
         visualizeData: function (visualizationData) {
             currentData = visualizationData;
             self.buildVisualization(visualizationData);
         }
-
     }
 
     return self.public;
