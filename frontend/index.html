@@ -19,25 +19,20 @@
 </head>
 <body>
 
-    <li class="mdc-list-item select-checkbox template" data-value="custom">
-        <span class="mdc-list-item__ripple"></span>
-            <div class="mdc-checkbox">
-              <input type="checkbox"
-                     class="mdc-checkbox__native-control"
-                     id="checkbox-1"/>
-              <div class="mdc-checkbox__background">
-                <svg class="mdc-checkbox__checkmark"
-                     viewBox="0 0 24 24">
-                  <path class="mdc-checkbox__checkmark-path"
-                        fill="none"
-                        d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                </svg>
-                <div class="mdc-checkbox__mixedmark"></div>
-              </div>
-              <div class="mdc-checkbox__ripple"></div>
-            </div>
-            <span class="mdc-list-item__text">Template Class Name</span>
-    </li>
+    <div class="mdc-checkbox template">
+        <input type="checkbox" class="mdc-checkbox__native-control"/>
+        <div class="mdc-checkbox__background">
+          <svg class="mdc-checkbox__checkmark"
+               viewBox="0 0 24 24">
+            <path class="mdc-checkbox__checkmark-path"
+                  fill="none"
+                  d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+          </svg>
+          <div class="mdc-checkbox__mixedmark"></div>
+        </div>
+        <div class="mdc-checkbox__ripple"></div>
+        <div class="checkbox__text"></div>
+    </div>
 
     <div class="mdc-drawer-app-content">
         <header class="mdc-top-app-bar app-bar" id="app-bar">
@@ -128,50 +123,6 @@
                         </ul>
                     </div>
                 </div>
-
-                <div class="mdc-select mdc-select--filled menu-selector-width menu-select" id="classes-selector">
-                    <div class="mdc-select__anchor">
-                        <span class="mdc-select__ripple"></span>
-                        <span class="mdc-floating-label mdc-floating-label--float-above">Classes</span>
-                        <span class="mdc-select__selected-text-container">
-                            <span class="mdc-select__selected-text">All</span>
-                        </span>
-                        <span class="mdc-select__dropdown-icon">
-                            <svg
-                                class="mdc-select__dropdown-icon-graphic"
-                                viewBox="7 10 10 5" focusable="false">
-                                <polygon
-                                    class="mdc-select__dropdown-icon-inactive"
-                                    stroke="none"
-                                    fill-rule="evenodd"
-                                    points="7 10 12 15 17 10">
-                                </polygon>
-                                <polygon
-                                    class="mdc-select__dropdown-icon-active"
-                                    stroke="none"
-                                    fill-rule="evenodd"
-                                    points="7 15 12 10 17 15">
-                                </polygon>
-                            </svg>
-                        </span>
-                        <span class="mdc-line-ripple"></span>
-                    </div>
-
-                    <div class="mdc-select__menu menu-selector-width mdc-menu mdc-menu-surface">
-                        <ul class="mdc-list">
-                            <li class="mdc-list-item mdc-list-item hidden-selector" data-value="custom">
-                                <span class="mdc-list-item__ripple"></span>
-                                <span class="mdc-list-item__text">Custom</span>
-                            </li>
-                            <li class="mdc-list-item mdc-list-item--selected" data-value="all" aria-selected="true">
-                                <span class="mdc-list-item__ripple"></span>
-                                <span class="mdc-list-item__text">All</span>
-                            </li>
-                            
-                            
-                        </ul>
-                    </div>
-                </div>
                 
                 <div class="mdc-select mdc-select--filled menu-selector-width menu-select" id="d-red-selector">
                     <div class="mdc-select__anchor">
@@ -222,6 +173,63 @@
             <div class="mdc-top-app-bar--fixed-adjust"></div>
             <div id="visualization-section">
                 <div class="vis-main-container">
+                    <div class="vis-left-pane"></div>
+                    <div class="vis-right-pane">
+                        <div class="vis-classes-filter-container">
+                            <div>Classes Filtering:</div>
+                            <div class="mdc-select mdc-select--filled menu-selector-width menu-select" id="classes-selector">
+                                <div class="mdc-select__anchor">
+                                    <span class="mdc-select__ripple"></span>
+                                    <span class="mdc-floating-label mdc-floating-label--float-above">Classes</span>
+                                    <span class="mdc-select__selected-text-container">
+                                        <span class="mdc-select__selected-text">All</span>
+                                    </span>
+                                    <span class="mdc-select__dropdown-icon">
+                                        <svg
+                                            class="mdc-select__dropdown-icon-graphic"
+                                            viewBox="7 10 10 5" focusable="false">
+                                            <polygon
+                                                class="mdc-select__dropdown-icon-inactive"
+                                                stroke="none"
+                                                fill-rule="evenodd"
+                                                points="7 10 12 15 17 10">
+                                            </polygon>
+                                            <polygon
+                                                class="mdc-select__dropdown-icon-active"
+                                                stroke="none"
+                                                fill-rule="evenodd"
+                                                points="7 15 12 10 17 15">
+                                            </polygon>
+                                        </svg>
+                                    </span>
+                                    <span class="mdc-line-ripple"></span>
+                                </div>
+            
+                                <div class="mdc-select__menu menu-selector-width mdc-menu mdc-menu-surface">
+                                    <ul class="mdc-list">
+                                        <li class="mdc-list-item mdc-list-item--selected" data-value="all" aria-selected="true">
+                                            <span class="mdc-list-item__ripple"></span>
+                                            <span class="mdc-list-item__text">All</span>
+                                        </li>
+                                        <li class="mdc-list-item mdc-list-item" data-value="custom">
+                                            <span class="mdc-list-item__ripple"></span>
+                                            <span class="mdc-list-item__text">Custom</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="vis-classes-filter-custom"></div>
+                            <button class="mdc-button mdc-button--outlined" id="vis-classe-filter-button">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label">FILTER</span>
+                            </button>
+
+                        </div>
+                        <div class="vis-image-container">
+                            <div>Selected Image:</div>
+                        </div>
+                        <div class="vis-info-container"></div>
+                    </div>
                 </div>
             </div>
         </section>
