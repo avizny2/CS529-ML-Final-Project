@@ -45,3 +45,10 @@ body {
     display: inline-block;
     padding-left: 80px;
 }
+
+.splash-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+}

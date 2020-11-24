@@ -30,9 +30,9 @@ const View = function (controllerClass) {
 
     self.initialize = function () {
         let leftPane = $('.vis-left-pane');
-        leftPane.css('width', ($(window).width() - 270) + 'px');
+        leftPane.css('width', ($(window).width() - 290) + 'px');
         $(window).resize(() => {
-            leftPane.css('width', ($(window).width() - 270) + 'px');
+            leftPane.css('width', ($(window).width() - 290) + 'px');
         });
 
         drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
@@ -51,6 +51,7 @@ const View = function (controllerClass) {
         visualizeButton.addEventListener('click', (event) => {
             drawer.open = false;
             controller.visualizaButtonClicked(customClassesList);
+            $('.splash-container').hide();
             $('.vis-classes-filter-container').show();
             $('.vis-image-container').show();
         });
@@ -251,7 +252,7 @@ const View = function (controllerClass) {
         } else {
             classVisualizationState[classID].isExpended = true;
             clikedClass.animate({
-                height: '335px',
+                height: '345px',
             });
             clikedClass.data('class-expanded', 'true')
         }

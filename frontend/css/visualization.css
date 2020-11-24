@@ -55,7 +55,7 @@
 
 .vis-class-layer-container {
     position: relative;
-    height: 160px;
+    height: 170px;
     margin-top: 20px;
     overflow-x: scroll;
 }
@@ -95,7 +95,7 @@
 .vis-right-pane {
     display: inline-block;
     position: fixed;
-    right: 0px;
+    right: 20px;
     width: 250px;
     height: 100%;
     vertical-align: top;
