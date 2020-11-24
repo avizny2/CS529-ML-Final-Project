@@ -89,16 +89,20 @@
 .vis-left-pane {
     display: inline-block;
     padding-left: 20px;
-    border-right: 2px  #A8A8A8 solid;
 }
 
 .vis-right-pane {
     display: inline-block;
     position: fixed;
     right: 20px;
-    width: 250px;
+    width: 272px;
     height: 100%;
     vertical-align: top;
+    padding-left: 20px;
+}
+
+.vis-right-pane-border {
+    border-left: 2px  #A8A8A8 solid;
 }
 
 .vis-image-container {
@@ -109,7 +113,7 @@
 
 .vis-classes-filter-container {
     width: 100%;
-    height: 75%;
+    height: 70%;
     vertical-align: top;
     overflow-y: scroll;
 }

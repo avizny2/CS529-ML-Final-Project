@@ -34,12 +34,37 @@
         <div class="checkbox__text"></div>
     </div>
 
+    <div class="mdc-dialog help-dialog">
+        <div class="mdc-dialog__container">
+          <div class="mdc-dialog__surface"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="my-dialog-title"
+            aria-describedby="my-dialog-content">
+            <h2 class="mdc-dialog__title" id="my-dialog-title">Help/Usage</h2>
+            <div class="mdc-dialog__content" id="my-dialog-content">
+              <img src="/img/help.png" width="500" height="300">
+            </div>
+            <div class="mdc-dialog__actions">
+                <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                  <div class="mdc-button__ripple"></div>
+                  <span class="mdc-button__label">Close</span>
+                </button>
+              </div>
+          </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+      </div>
+
     <div class="mdc-drawer-app-content">
         <header class="mdc-top-app-bar app-bar mdc-top-app-bar--fixed" id="app-bar">
             <div class="mdc-top-app-bar__row">
             <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
                 <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
                 <span class="mdc-top-app-bar__title">Visualization of ML Model Data Flow</span>
+            </section>
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button " aria-label="Help" id="help-button">help</button>
             </section>
             </div>
         </header>
@@ -229,6 +254,9 @@
                                 <div class="mdc-button__ripple"></div>
                                 <span class="mdc-button__label">FILTER</span>
                             </button>
+                            <div class="vis-class-spacer"></div>
+                            <div class="vis-class-spacer"></div>
+                            <div class="vis-class-spacer"></div>
                         </div>
                     </div>
                 </div>

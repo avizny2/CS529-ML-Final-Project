@@ -52,3 +52,10 @@ body {
     margin-right: auto;
     width: 800px;
 }
+
+
+.mdc-dialog__content {
+    max-width: 800px !important;
+    width: 800px;
+   
+}

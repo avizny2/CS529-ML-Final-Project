@@ -22,7 +22,8 @@ const View = function (controllerClass) {
     };
 
     let drawer, topAppBar;
-    let modelSelector, datasetSelector, dRedSelector, classesSelector, visualizeButton, filterButton;
+    let modelSelector, datasetSelector, dRedSelector, classesSelector, helpDialog,
+    visualizeButton, filterButton, helpButton;
     let classesCheckboxes = [];
     let customClassesList = [];
     let classNameList = [];
@@ -50,7 +51,9 @@ const View = function (controllerClass) {
         visualizeButton = document.querySelector('#menu-visualize-button');
         visualizeButton.addEventListener('click', (event) => {
             drawer.open = false;
-            controller.visualizaButtonClicked(customClassesList);
+            $('.vis-left-pane').empty();
+            $('.vis-right-pane').addClass('vis-right-pane-border');
+            controller.visualizaButtonClicked([]);
             $('.splash-container').hide();
             $('.vis-classes-filter-container').show();
             $('.vis-image-container').show();
@@ -73,6 +76,13 @@ const View = function (controllerClass) {
                     }
                 }
             });
+        });
+
+        helpDialog = new mdc.dialog.MDCDialog(document.querySelector('.help-dialog'));
+
+        helpButton = document.querySelector('#help-button');
+        helpButton.addEventListener('click', (event) => {
+           helpDialog.open();
         });
     }
 
