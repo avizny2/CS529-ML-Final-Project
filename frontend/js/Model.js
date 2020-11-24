@@ -5,7 +5,7 @@ const Model = function (controllerClass) {
     const self = this;
     const controller = controllerClass;
     let classes = []
-
+    let imagePath = '';
 
     self.initialize = function () {
 
@@ -13,6 +13,7 @@ const Model = function (controllerClass) {
 
     self.loadJSON = function (fileName) {
         $.getJSON('data/' + fileName, function (data) {
+            imagePath = data.images;
             $.each(data.classes, function (key, val) {
                 classes.push(val);
             });
@@ -41,6 +42,10 @@ const Model = function (controllerClass) {
         }
     }
 
+    self.getImagePath = function() {
+        return imagePath;
+    }
+
     self.public = {
 
         initialize: function () {
@@ -53,6 +58,10 @@ const Model = function (controllerClass) {
 
         getClassNames: function () {
             return self.createClassNameList();
+        },
+
+        getImagePath: function() {
+            return self.getImagePath();
         },
 
         getVisualizationData: function (selectedClasseList) {

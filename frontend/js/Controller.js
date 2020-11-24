@@ -12,7 +12,7 @@ const Controller = function () {
     self.initialize = function () {
         model.initialize();
         view.initialize();
-        model.load('synth_json1.json');
+        model.load('block_resnet50.json');
     }
 
     self.public = {
@@ -23,6 +23,10 @@ const Controller = function () {
         updateFilters: function () {
             let classNames = model.getClassNames();
             view.updateClassFilters(classNames);
+        },
+
+        getImagePath: function() {
+            return model.getImagePath();
         },
 
         visualizaButtonClicked: function (selectedClassesList) {

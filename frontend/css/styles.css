@@ -18,9 +18,7 @@ body {
     height: 100%;
 }
   
-.app-bar {
-    position: absolute;
-}
+
 
 .mdc-top-app-bar {
     z-index: 10;

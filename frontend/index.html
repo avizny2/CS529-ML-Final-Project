@@ -35,7 +35,7 @@
     </div>
 
     <div class="mdc-drawer-app-content">
-        <header class="mdc-top-app-bar app-bar" id="app-bar">
+        <header class="mdc-top-app-bar app-bar mdc-top-app-bar--fixed" id="app-bar">
             <div class="mdc-top-app-bar__row">
             <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
                 <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
@@ -175,6 +175,9 @@
                 <div class="vis-main-container">
                     <div class="vis-left-pane"></div>
                     <div class="vis-right-pane">
+                        <div class="vis-image-container">
+                            <div>Selected Image:</div>
+                        </div>
                         <div class="vis-classes-filter-container">
                             <div>Classes Filtering:</div>
                             <div class="mdc-select mdc-select--filled menu-selector-width menu-select" id="classes-selector">
@@ -205,7 +208,7 @@
                                     <span class="mdc-line-ripple"></span>
                                 </div>
             
-                                <div class="mdc-select__menu menu-selector-width mdc-menu mdc-menu-surface">
+                                <div class="mdc-select__menu mdc-menu mdc-menu-surface classes-filter-menu-width">
                                     <ul class="mdc-list">
                                         <li class="mdc-list-item mdc-list-item--selected" data-value="all" aria-selected="true">
                                             <span class="mdc-list-item__ripple"></span>
@@ -223,12 +226,7 @@
                                 <div class="mdc-button__ripple"></div>
                                 <span class="mdc-button__label">FILTER</span>
                             </button>
-
                         </div>
-                        <div class="vis-image-container">
-                            <div>Selected Image:</div>
-                        </div>
-                        <div class="vis-info-container"></div>
                     </div>
                 </div>
             </div>

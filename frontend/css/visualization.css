@@ -10,11 +10,24 @@
     height: 20px;
 }
 
+.vis-class-title {
+    display: block;
+    width: 150px;
+    height: 15px;
+    text-align: center;
+}
+.vis-class-data {
+    display: block;
+    width: 150px;
+    height: 135px;
+}
+
 .vis-class-container {
     display: block;
     width: 100%;
     height: 152px;
-    overflow:hidden;
+    overflow: hidden;
+    margin-top: 20px;
 }
 
 .vis-class-block-container {
@@ -26,9 +39,7 @@
     display: inline-block;
     width: 150px;
     height: 150px;
-    border-width: 1px;
-    border-color: #000000;
-    border-style: solid;
+
     vertical-align: top;
 }
 .vis-class-block {
@@ -43,16 +54,17 @@
 }
 
 .vis-class-layer-container {
-    width: 100%;
+    position: relative;
     height: 150px;
     margin-top: 20px;
+    overflow-x: scroll;
 }
 
 .vis-class-info-spacer {
     display: inline-block;
     width: 150px;
-    height: q50px;
-    vertical-align: top
+    height: 135px;
+    vertical-align: top;
 }
 
 .vis-class-layer {
@@ -76,37 +88,38 @@
 
 .vis-left-pane {
     display: inline-block;
-    width: 70%;
-    height: 100%;
     padding-left: 20px;
+    border-right: 2px  #A8A8A8 solid;
 }
 
 .vis-right-pane {
     display: inline-block;
-    width: 29%;
+    position: fixed;
+    right: 0px;
+    width: 250px;
     height: 100%;
-    vertical-align: top;
-}
-.vis-classes-filter-container {
-    width: 100%;
-    height: 33.3%;
     vertical-align: top;
 }
 
 .vis-image-container {
     width: 100%;
-    height: 33.3%;
+    height: 25%;
     vertical-align: top;
 }
 
-.vis-info-container {
+.vis-classes-filter-container {
     width: 100%;
-    height: 33.3%;
+    height: 75%;
     vertical-align: top;
+    overflow-y: scroll;
+}
+
+.vis-classes-filter-custom {
+    margin-top: -15px;
 }
 
 #vis-classe-filter-button {
-    margin-left: 25% ;
+    margin-top: 10px;
 }
 
 .mdc-checkbox {
@@ -119,6 +132,10 @@
 }
 
 #classes-selector {
-    width: 80%;
+    width: 250px;
     padding-top: 15px;
+}
+
+.classes-filter-menu-width {
+    width: 200px;
 }
