@@ -251,7 +251,7 @@ const View = function (controllerClass) {
         } else {
             classVisualizationState[classID].isExpended = true;
             clikedClass.animate({
-                height: '330px',
+                height: '335px',
             });
             clikedClass.data('class-expanded', 'true')
         }
