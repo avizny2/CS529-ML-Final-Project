@@ -308,14 +308,19 @@ const View = function (controllerClass) {
 
         var yScaler = d3.scaleLinear()
             .domain(self.calculateMinMaxY(layerData))
-            .range([selectedElementJQ.height() - pointradius * 2, pointradius * 2]);
+            .range([selectedElementJQ.height() - 20 - pointradius * 2, pointradius * 2]);
+
+        var xAxis = d3.axisBottom(xScaler).ticks(15);
+        
+        var yAxis = d3.axisLeft(yScaler).ticks(15);
 
         let svg = selectedElementD3
             .append("svg")
             .attr("width", selectedElementJQ.width())
-            .attr("height", selectedElementJQ.height())
+            .attr("height", selectedElementJQ.height() + 50)
 
         svg.append('g')
+            .attr("transform", "translate(50,0)") 
             .selectAll("dot")
             .data(layerData)
             .enter()
@@ -354,6 +359,16 @@ const View = function (controllerClass) {
                 }
                 console.log(modal);
             });
+        
+        svg.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(50,540)')
+            .call(xAxis);
+    
+        svg.append('g')
+            .attr('class', 'y axis')
+            .attr('transform', 'translate(50,0)')
+            .call(yAxis);
     }
 
     self.processBlockClickEvent = function (event) {
