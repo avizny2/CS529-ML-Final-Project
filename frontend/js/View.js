@@ -360,11 +360,11 @@ const View = function (controllerClass) {
         let pointradius = 4;
         let xScaler = d3.scaleLinear()
             .domain(self.calculateMinMaxX(layerData))
-            .range([pointradius * 2, selectedElementJQ.width() - pointradius * 2]);
+            .range([pointradius * 2, selectedElementJQ.width() - 60 - pointradius * 2]);
 
         var yScaler = d3.scaleLinear()
             .domain(self.calculateMinMaxY(layerData))
-            .range([selectedElementJQ.height() - 60 - pointradius * 2, pointradius * 2]);
+            .range([ pointradius * 2, selectedElementJQ.height() - 60 - pointradius * 2]);
 
         var xAxis = d3.axisBottom(xScaler).ticks(15);
         
