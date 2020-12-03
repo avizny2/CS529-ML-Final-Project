@@ -28,6 +28,7 @@ const View = function (controllerClass) {
     let customClassesList = [];
     let classNameList = [];
     let isDataLoaded = false;
+    let tSNE = false;
 
     self.initialize = function () {
         let leftPane = $('.vis-left-pane');
@@ -47,6 +48,13 @@ const View = function (controllerClass) {
         modelSelector = new mdc.select.MDCSelect(document.querySelector('#model-selector'));
         datasetSelector = new mdc.select.MDCSelect(document.querySelector('#dataset-selector'));
         dRedSelector = new mdc.select.MDCSelect(document.querySelector('#d-red-selector'));
+        dRedSelector.listen('MDCSelect:change', () => {
+            if(dRedSelector.selectedIndex === 1) {
+                tSNE = true;
+            } else {
+                tSNE = false;
+            }
+        });
 
         visualizeButton = document.querySelector('#menu-visualize-button');
         visualizeButton.addEventListener('click', (event) => {
@@ -127,22 +135,40 @@ const View = function (controllerClass) {
                 for (let k = 0; k < currentLayer.length; k++) {
                     let currentPoint = currentLayer[k];
 
-                    if (axis === 'x') {
-                        if (min > parseFloat(currentPoint.x)) {
-                            min = parseFloat(currentPoint.x);
-                        }
-                        if (max < parseFloat(currentPoint.x)) {
-                            max = parseFloat(currentPoint.x);
+                    if (axis === 'x' ) {
+                        if (tSNE === false) {
+                            if (min > parseFloat(currentPoint.x_pca)) {
+                                min = parseFloat(currentPoint.x_pca);
+                            }
+                            if (max < parseFloat(currentPoint.x_pca)) {
+                                max = parseFloat(currentPoint.x_pca);
+                            }
+                        } else {
+
+                            if (min > parseFloat(currentPoint.x_tsne)) {
+                                min = parseFloat(currentPoint.x_tsne);
+                            }
+                            if (max < parseFloat(currentPoint.x_tsne)) {
+                                max = parseFloat(currentPoint.x_tsne);
+                            }
                         }
                     } else {
-                        if (min > parseFloat(currentPoint.y)) {
-                            min = parseFloat(currentPoint.y);
-                        }
-                        if (max < parseFloat(currentPoint.y)) {
-                            max = parseFloat(currentPoint.y);
+                        if (tSNE === false) {
+                            if (min > parseFloat(currentPoint.y_pca)) {
+                                min = parseFloat(currentPoint.y_pca);
+                            }
+                            if (max < parseFloat(currentPoint.y_pca)) {
+                                max = parseFloat(currentPoint.y_pca);
+                            }
+                        } else {
+                            if (min > parseFloat(currentPoint.y_tsne)) {
+                                min = parseFloat(currentPoint.y_tsne);
+                            }
+                            if (max < parseFloat(currentPoint.y_tsne)) {
+                                max = parseFloat(currentPoint.y_tsne);
+                            }
                         }
                     }
-
                 }
             }
         }
@@ -225,8 +251,20 @@ const View = function (controllerClass) {
             .enter()
             .append("circle")
             .attr('id', (d) => d.guid)
-            .attr("cx", (d) => xScaler(parseFloat(d.x)))
-            .attr("cy", (d) => yScaler(parseFloat(d.y)))
+            .attr("cx", (d) => {
+                if(tSNE === false) {
+                    return xScaler(parseFloat(d.x_pca));
+                } else {
+                    return xScaler(parseFloat(d.x_tsne));
+                }
+            })
+            .attr("cy", (d) => {
+                if(tSNE === false) {
+                    return xScaler(parseFloat(d.y_pca));
+                } else {
+                    return xScaler(parseFloat(d.y_tsne));
+                }
+            })
             .attr("r", pointradius)
             .style("fill", currentData[classID].meta.color)
             .on('click', (event, data) => {
@@ -268,11 +306,20 @@ const View = function (controllerClass) {
         let max = -999999999.0;
         for (let i = 0; i < layerData.length; i++) {
             let currentPoint = layerData[i];
-            if (min > parseFloat(currentPoint.x)) {
-                min = parseFloat(currentPoint.x);
-            }
-            if (max < parseFloat(currentPoint.x)) {
-                max = parseFloat(currentPoint.x);
+            if (tSNE === false) {
+                if (min > parseFloat(currentPoint.x_pca)) {
+                    min = parseFloat(currentPoint.x_pca);
+                }
+                if (max < parseFloat(currentPoint.x_pca)) {
+                    max = parseFloat(currentPoint.x_pca);
+                }
+            } else {
+                if (min > parseFloat(currentPoint.x_tsne)) {
+                    min = parseFloat(currentPoint.x_tsne);
+                }
+                if (max < parseFloat(currentPoint.x_tsne)) {
+                    max = parseFloat(currentPoint.x_tsne);
+                }
             }
         }
         return [min, max];
@@ -283,11 +330,20 @@ const View = function (controllerClass) {
         let max = -999999999.0;
         for (let i = 0; i < layerData.length; i++) {
             let currentPoint = layerData[i];
-            if (min > parseFloat(currentPoint.y)) {
-                min = parseFloat(currentPoint.y);
-            }
-            if (max < parseFloat(currentPoint.y)) {
-                max = parseFloat(currentPoint.y);
+            if (tSNE === false) {
+                if (min > parseFloat(currentPoint.y_pca)) {
+                    min = parseFloat(currentPoint.y_pca);
+                }
+                if (max < parseFloat(currentPoint.y_pca)) {
+                    max = parseFloat(currentPoint.y_pca);
+                }
+            } else {
+                if (min > parseFloat(currentPoint.y_tsne)) {
+                    min = parseFloat(currentPoint.y_tsne);
+                }
+                if (max < parseFloat(currentPoint.y_tsne)) {
+                    max = parseFloat(currentPoint.y_tsne);
+                }
             }
         }
         return [min, max];
@@ -308,7 +364,7 @@ const View = function (controllerClass) {
 
         var yScaler = d3.scaleLinear()
             .domain(self.calculateMinMaxY(layerData))
-            .range([selectedElementJQ.height() - 20 - pointradius * 2, pointradius * 2]);
+            .range([selectedElementJQ.height() - 60 - pointradius * 2, pointradius * 2]);
 
         var xAxis = d3.axisBottom(xScaler).ticks(15);
         
@@ -317,7 +373,7 @@ const View = function (controllerClass) {
         let svg = selectedElementD3
             .append("svg")
             .attr("width", selectedElementJQ.width())
-            .attr("height", selectedElementJQ.height() + 50)
+            .attr("height", selectedElementJQ.height())
 
         svg.append('g')
             .attr("transform", "translate(50,0)") 
@@ -326,8 +382,20 @@ const View = function (controllerClass) {
             .enter()
             .append("circle")
             .attr('id', (d) => d.guid)
-            .attr("cx", (d) => xScaler(parseFloat(d.x)))
-            .attr("cy", (d) => yScaler(parseFloat(d.y)))
+            .attr("cx", (d) => {
+                if(tSNE === false) {
+                    return xScaler(parseFloat(d.x_pca));
+                } else {
+                    return xScaler(parseFloat(d.x_tsne));
+                }
+            })
+            .attr("cy", (d) => {
+                if(tSNE === false) {
+                    return yScaler(parseFloat(d.y_pca));
+                } else {
+                    return yScaler(parseFloat(d.y_tsne));
+                }
+            })
             .attr("r", pointradius)
             .style("fill", (d) => {
                 if(visualizationState.selectedGUID === 'none' || visualizationState.selectedGUID === '') {
@@ -357,12 +425,11 @@ const View = function (controllerClass) {
                         }
                     }
                 }
-                console.log(modal);
             });
         
         svg.append('g')
             .attr('class', 'x axis')
-            .attr('transform', 'translate(50,540)')
+            .attr('transform', 'translate(50,510)')
             .call(xAxis);
     
         svg.append('g')
