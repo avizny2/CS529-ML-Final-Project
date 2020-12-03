@@ -39,7 +39,6 @@
     display: inline-block;
     width: 150px;
     height: 150px;
-
     vertical-align: top;
 }
 .vis-class-block {
@@ -50,6 +49,15 @@
     border-width: 1px;
     border-color: #000000;
     border-style: solid;
+    cursor: pointer;
+}
+
+.modal-body {
+    height: 600px;
+    width: 600px;
+}
+
+circle {
     cursor: pointer;
 }
 
@@ -75,6 +83,7 @@
     border-width: 1px;
     border-color: #000000;
     border-style: solid;
+    cursor: zoom-in;
 }
 
 .vis-selected-block {

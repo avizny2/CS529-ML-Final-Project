@@ -238,11 +238,6 @@ const View = function (controllerClass) {
                     self.showPointImage(parsedData[0], guid);
                 }
             });
-        // svg.append("text")
-        //     .attr('x', selectedElementJQ.width() / 2)
-        //     .attr('y', 15)
-        //     .style('text-anchor', 'middle')
-        //     .text('B' + (parseInt(blockID) + 1) + '-L' + (parseInt(layerID) + 1));
     }
 
     self.expendClassToggle = function (classID) {
@@ -268,12 +263,97 @@ const View = function (controllerClass) {
         }
     }
 
-    self.processLayerClickEvent = function (event) {
-        let layer = $(event.target);
-        let blockDataAttr = layer.data('layer-id').split("-");
-        let classID = blockDataAttr[0];
-        let blockID = blockDataAttr[1];
-        let layerID = blockDataAttr[2];
+    self.calculateMinMaxX = function(layerData) {
+        let min = 9999999999.0;
+        let max = -999999999.0;
+        for (let i = 0; i < layerData.length; i++) {
+            let currentPoint = layerData[i];
+            if (min > parseFloat(currentPoint.x)) {
+                min = parseFloat(currentPoint.x);
+            }
+            if (max < parseFloat(currentPoint.x)) {
+                max = parseFloat(currentPoint.x);
+            }
+        }
+        return [min, max];
+    }
+
+    self.calculateMinMaxY = function(layerData) {
+        let min = 9999999999.0;
+        let max = -999999999.0;
+        for (let i = 0; i < layerData.length; i++) {
+            let currentPoint = layerData[i];
+            if (min > parseFloat(currentPoint.y)) {
+                min = parseFloat(currentPoint.y);
+            }
+            if (max < parseFloat(currentPoint.y)) {
+                max = parseFloat(currentPoint.y);
+            }
+        }
+        return [min, max];
+    }
+
+    self.zoomLayer = function(zoomedLayerModal, classID, blockID, layerID) {
+        let modalBody = zoomedLayerModal.find('.modal-body');
+        modalBody.text('');
+
+        let layerData = currentData[classID].blocks[blockID].layers[layerID].layers;
+        let selectedElementJQ = modalBody;
+        let selectedElementD3 = d3.select(modalBody.get(0));
+        let visualizationState = classVisualizationState[classID];
+        let pointradius = 4;
+        let xScaler = d3.scaleLinear()
+            .domain(self.calculateMinMaxX(layerData))
+            .range([pointradius * 2, selectedElementJQ.width() - pointradius * 2]);
+
+        var yScaler = d3.scaleLinear()
+            .domain(self.calculateMinMaxY(layerData))
+            .range([selectedElementJQ.height() - pointradius * 2, pointradius * 2]);
+
+        let svg = selectedElementD3
+            .append("svg")
+            .attr("width", selectedElementJQ.width())
+            .attr("height", selectedElementJQ.height())
+
+        svg.append('g')
+            .selectAll("dot")
+            .data(layerData)
+            .enter()
+            .append("circle")
+            .attr('id', (d) => d.guid)
+            .attr("cx", (d) => xScaler(parseFloat(d.x)))
+            .attr("cy", (d) => yScaler(parseFloat(d.y)))
+            .attr("r", pointradius)
+            .style("fill", (d) => {
+                if(visualizationState.selectedGUID === 'none' || visualizationState.selectedGUID === '') {
+                    return currentData[classID].meta.color
+                } else {
+                    if(d.guid === visualizationState.selectedGUID) {
+                        return currentData[classID].meta.color
+                    } else {
+                        return '#A8A8A8';
+                    }
+                }
+            })
+            .on('click', (event, data) => {
+                let guid = data.guid;
+                self.filterPoints(classID, guid);
+                self.showPointImage(classID, guid);
+                let modal = $(event.target).parent().find('circle');
+                for (let i = 0; i < modal.length; i++) {
+                    let circle = $(modal.get(i));
+                    if(visualizationState.selectedGUID === 'none' || visualizationState.selectedGUID === '') {
+                        circle.attr('style', 'fill: ' + currentData[classID].meta.color);
+                    } else {
+                        if(circle.attr('id') === visualizationState.selectedGUID) {
+                            circle.attr('style', 'fill: ' + currentData[classID].meta.color);
+                        } else {
+                            circle.attr('style', 'fill: #A8A8A8');
+                        }
+                    }
+                }
+                console.log(modal);
+            });
     }
 
     self.processBlockClickEvent = function (event) {
@@ -325,6 +405,21 @@ const View = function (controllerClass) {
         if (prevClickedBlockID === -1 || prevClickedBlockID === blockID) {
             self.expendClassToggle(classID);
         }
+    }
+
+    self.processLayerClickEvent = function(event) {
+        if (event.target.tagName.toLowerCase() !== 'svg') {
+            return;
+        }
+        let layer = $(event.target).parents('.vis-class-layer');
+        let blockDataAttr = layer.data('layer-id').split("-");
+        let classID = parseInt(blockDataAttr[0]);
+        let blockID = parseInt(blockDataAttr[1]);
+        let layerID = parseInt(blockDataAttr[2]);
+        let zoomedLayerModal =  $('#zoomed-layer-modal');
+        zoomedLayerModal.modal('toggle');
+        zoomedLayerModal.find('.modal-title').html(layer.find('.vis-class-title').text());
+        self.zoomLayer(zoomedLayerModal, classID, blockID, layerID)
     }
 
     self.createClassContainerElement = function () {
@@ -380,6 +475,7 @@ const View = function (controllerClass) {
         let data = div.clone();
         data.addClass('vis-class-data');
         classContainer.append(data);
+        classContainer.on('click', (event) => self.processLayerClickEvent(event));
         return classContainer;
     }
 
@@ -417,10 +513,6 @@ const View = function (controllerClass) {
                 classBlockContainer.append(blockElement);
                 self.plotLayer(blockElement.find('.vis-class-data')[0], i, j, (currentData[i].blocks[j].layers.length - 1));
             }
-
-            // if (i !== (visualizationData.length - 1)) {
-               
-            // }
 
         }
         mainVisContainer.append('<div class="vis-class-spacer"></div>')
